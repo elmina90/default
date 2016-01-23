@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private int [] tabs_icon = {R.drawable.ic_dining,
+            R.drawable.ic_event,
+            R.drawable.ic_travelspot};
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -53,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        for (int i = 0; i < tabLayout.getTabCount() ; i++) {
+            tabLayout.getTabAt(i).setIcon(tabs_icon[i]);
+        }
 
       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
       fab.setOnClickListener(new View.OnClickListener() {
