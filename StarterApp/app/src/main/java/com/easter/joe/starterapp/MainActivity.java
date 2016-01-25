@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         for (int i = 0; i < tabLayout.getTabCount() ; i++) {
+            tabLayout.getTabAt(i).setIcon(tabs_icon[i]);
         }
 
 //      FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
