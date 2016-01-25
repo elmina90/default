@@ -1,5 +1,8 @@
 package com.easter.joe.starterapp;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private int [] tabs_icon = {R.drawable.ic_dining,
             R.drawable.ic_event,
-            R.drawable.ic_travelspot};
+            R.drawable.ic_travelspot, R.drawable.ic_favourite};
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -54,8 +57,13 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
         for (int i = 0; i < tabLayout.getTabCount() ; i++) {
-            tabLayout.getTabAt(i).setIcon(tabs_icon[i]);
+            Drawable dr = getResources().getDrawable(tabs_icon[i],getTheme());
+            Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
+            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 200, 200, true));
+
+            tabLayout.getTabAt(i).setIcon(d);
         }
 
 //      FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -114,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 4 total pages.
+            return 4;
         }
 
         @Override
