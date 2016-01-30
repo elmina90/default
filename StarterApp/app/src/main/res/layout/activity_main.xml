@@ -39,10 +39,11 @@
             android:gravity="center"
             android:layout_weight="1">
 
-            <ImageView
+            <ImageButton
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_account_circle_white_24dp"
+                android:background="@null"
                 android:layout_gravity="right" />
         </LinearLayout>
 
