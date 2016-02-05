@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -62,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Add icon per tab
         for (int i = 0; i < tabLayout.getTabCount() ; i++) {
-            Drawable dr = getResources().getDrawable(tabs_icon[i],getTheme());
+            // getResource().getDrawable() is deprecated, use contextCompat.getDrawable() instead
+            Drawable dr = ContextCompat.getDrawable(this, tabs_icon[i]);
             Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
             Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 200, 200, true));
 
