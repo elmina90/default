@@ -5,13 +5,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -63,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        // Add icon per tab
         for (int i = 0; i < tabLayout.getTabCount() ; i++) {
             Drawable dr = getResources().getDrawable(tabs_icon[i],getTheme());
             Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
@@ -71,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tabLayout.getTabAt(i).setIcon(d);
         }
 
+        // Set navigation drawer toggle
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -80,6 +79,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Set navigation called by navigation icon
+        ImageButton imb = (ImageButton) findViewById(R.id.drawer_button);
+        imb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.openDrawer(GravityCompat.END);
+            }
+        });
+
+//        Use FAB for search feature
 //      FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //      fab.setOnClickListener(new View.OnClickListener() {
 //          @Override
@@ -88,15 +98,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                      .setAction("Action", null).show();
 //          }
 //      });
-
-        ImageButton imb = (ImageButton) findViewById(R.id.drawer_button);
-        imb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.openDrawer(GravityCompat.END);
-            }
-        });
 
     }
 
@@ -129,8 +130,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+
+        // Handle the navigation action
+        if (id == R.id.nav_mac) {
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -147,24 +149,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.END);
         return true;
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
