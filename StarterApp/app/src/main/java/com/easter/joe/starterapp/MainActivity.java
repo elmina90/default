@@ -1,11 +1,17 @@
 package com.easter.joe.starterapp;
 
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.support.v7.app.AlertDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +22,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageButton;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private ViewPager mViewPager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setOnTabSelectedListener(new TabViewPagerOnTabSelectedListener(mViewPager));
 
         // Add icon per tab
         for (int i = 0; i < tabLayout.getTabCount() ; i++) {
@@ -70,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             tabLayout.getTabAt(i).setIcon(d);
         }
+
+        tabLayout.getTabAt(0).select();
 
         // Set navigation drawer toggle
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -103,6 +116,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    private class TabViewPagerOnTabSelectedListener extends TabLayout.ViewPagerOnTabSelectedListener {
+
+        public TabViewPagerOnTabSelectedListener(ViewPager viewPager) {
+            super(viewPager);
+        }
+
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+            mViewPager.setCurrentItem(tab.getPosition());
+            if (tab.isSelected()) tab.getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab){
+            switch (tab.getPosition()){
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    tab.getIcon().setColorFilter(getResources().getColor(R.color.colorWhite), PorterDuff.Mode.SRC_ATOP);
+                    break;
+            }
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+            if (tab.isSelected()) tab.getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -147,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
+        // Close navigation drawer, after navigation section selected
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.END);
         return true;
@@ -207,8 +250,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
