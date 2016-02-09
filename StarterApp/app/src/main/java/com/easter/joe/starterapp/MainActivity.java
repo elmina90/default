@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static int [] ICONS = {R.drawable.ic_dining,
             R.drawable.ic_event,
             R.drawable.ic_travelspot, R.drawable.ic_favourite};
+    private DrawerLayout Drawer;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -65,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        this.Drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setOnTabSelectedListener(new TabViewPagerOnTabSelectedListener(mViewPager));
@@ -83,10 +86,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.getTabAt(0).select();
 
         // Set navigation drawer toggle
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, this.Drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        this.Drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -97,8 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         imb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.openDrawer(GravityCompat.END);
+                Drawer.openDrawer(GravityCompat.END);
             }
         });
 
@@ -113,24 +114,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //      });
     }
 
+    @Override
     public void onBackPressed(){
+        // Close navigation drawer on backPressed where the nav state is open
+        if (this.Drawer.isDrawerOpen(GravityCompat.END)) {
+            this.Drawer.closeDrawer(GravityCompat.END);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void callDialog(){
-        new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                .setTitle("Debug dialog")
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+
+        alertDialog.setTitle("Debug dialog")
                 .setMessage("Hello world")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        // Some stuff to do when ok got clicked
-                    }
-                })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        // Some stuff to do when cancel got clicked
-                    }
-                })
-                .show();
+            public void onClick(DialogInterface arg0, int arg1) {
+                // Some stuff to do when ok got clicked
+            }
+        })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                // Some stuff to do when cancel got clicked
+            }
+        }).show();
     }
 
     // Class to manage select listener on TabLayout
@@ -194,22 +202,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         // Handle the navigation action
-        if (id == R.id.nav_mac) {
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+//        if (id == R.id.nav_mac) {
+//        } else if (id == R.id.nav_gallery) {
+//
+//        } else if (id == R.id.nav_slideshow) {
+//
+//        } else if (id == R.id.nav_manage) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         // Close navigation drawer, after navigation section selected
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.END);
+        this.Drawer.closeDrawer(GravityCompat.END);
         return true;
     }
 
