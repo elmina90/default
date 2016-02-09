@@ -1,17 +1,15 @@
 package com.easter.joe.starterapp;
 
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,8 +20,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.support.v7.view.ContextThemeWrapper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,8 +27,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageButton;
-import android.widget.TabHost;
 import android.widget.TextView;
+
+import java.io.Console;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -45,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private int [] tabs_icon = {R.drawable.ic_dining,
+    private static int [] ICONS = {R.drawable.ic_dining,
             R.drawable.ic_event,
             R.drawable.ic_travelspot, R.drawable.ic_favourite};
 
@@ -75,13 +72,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Add icon per tab
         for (int i = 0; i < tabLayout.getTabCount() ; i++) {
             // getResource().getDrawable() is deprecated, use contextCompat.getDrawable() instead
-            Drawable dr = ContextCompat.getDrawable(this, tabs_icon[i]);
+            Drawable dr = ContextCompat.getDrawable(this, ICONS[i]);
             Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
             Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 200, 200, true));
 
             tabLayout.getTabAt(i).setIcon(d);
         }
 
+        // Select 1st action_tab at the beginning
         tabLayout.getTabAt(0).select();
 
         // Set navigation drawer toggle
@@ -113,9 +111,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                      .setAction("Action", null).show();
 //          }
 //      });
-
     }
 
+    public void onBackPressed(){
+    }
+
+    private void callDialog(){
+        new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle("Debug dialog")
+                .setMessage("Hello world")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        // Some stuff to do when ok got clicked
+                    }
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        // Some stuff to do when cancel got clicked
+                    }
+                })
+                .show();
+    }
+
+    // Class to manage select listener on TabLayout
     private class TabViewPagerOnTabSelectedListener extends TabLayout.ViewPagerOnTabSelectedListener {
 
         public TabViewPagerOnTabSelectedListener(ViewPager viewPager) {
@@ -125,24 +143,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
             mViewPager.setCurrentItem(tab.getPosition());
-            if (tab.isSelected()) tab.getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+
+            if (tab.isSelected() && tab.getIcon() != null)
+                tab.getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
         }
 
         @Override
         public void onTabUnselected(TabLayout.Tab tab){
             switch (tab.getPosition()){
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                    tab.getIcon().setColorFilter(getResources().getColor(R.color.colorWhite), PorterDuff.Mode.SRC_ATOP);
+                case 0: case 1: case 2: case 3:
+                    if (tab.getIcon() != null)
+                        tab.getIcon().setColorFilter(getResources().getColor(R.color.colorWhite), PorterDuff.Mode.SRC_ATOP);
                     break;
             }
         }
 
         @Override
         public void onTabReselected(TabLayout.Tab tab) {
-            if (tab.isSelected()) tab.getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+            if (tab.isSelected() && tab.getIcon() != null) tab.getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
         }
     }
 
