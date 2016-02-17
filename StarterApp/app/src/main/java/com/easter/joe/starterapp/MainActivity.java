@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.Drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.getLayoutParams().width = this.dpToPx(280);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setOnTabSelectedListener(new TabViewPagerOnTabSelectedListener(mViewPager));
 
@@ -74,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // getResource().getDrawable() is deprecated, use contextCompat.getDrawable() instead
             Drawable dr = ContextCompat.getDrawable(this, ICONS[i]);
             Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
-            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 200, 200, true));
+            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, this.dpToPx(56), this.dpToPx(56), true));
 
             tabLayout.getTabAt(i).setIcon(d);
         }
@@ -121,11 +126,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void callDialog(){
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
+    }
+
+    public int pxToDp(int px) {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return dp;
+    }
+
+    private void callDialog(String value){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
 
         alertDialog.setTitle("Debug dialog")
-                .setMessage("Hello world")
+                .setMessage("Debug : " + value)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
                 // Some stuff to do when ok got clicked
