@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Prototype Android</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="tab_place">This is tab for Places</string>
+    <string name="tab_event">This is tab for Events</string>
+    <string name="tab_travelspot">This is tab for Travel Spots</string>
+    <string name="action_settings">Settings</string>
+</resources>
