@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
             Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, this.dpToPx(56), this.dpToPx(56), true));
 
+            d.setColorFilter(getResources().getColor(R.color.colorGrey), PorterDuff.Mode.SRC_ATOP);
             tabLayout.getTabAt(i).setIcon(d);
         }
 
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (tab.getPosition()){
                 case 0: case 1: case 2: case 3:
                     if (tab.getIcon() != null)
-                        tab.getIcon().setColorFilter(getResources().getColor(R.color.colorWhite), PorterDuff.Mode.SRC_ATOP);
+                        tab.getIcon().setColorFilter(getResources().getColor(R.color.colorGrey), PorterDuff.Mode.SRC_ATOP);
                     break;
             }
         }
