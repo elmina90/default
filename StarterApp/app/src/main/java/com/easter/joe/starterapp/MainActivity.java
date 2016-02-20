@@ -1,5 +1,6 @@
 package com.easter.joe.starterapp;
 
+import android.support.design.widget.FloatingActionButton;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
@@ -107,14 +108,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 //        Use FAB for search feature
-//      FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//      fab.setOnClickListener(new View.OnClickListener() {
-//          @Override
-//          public void onClick(View view) {
-//              Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                      .setAction("Action", null).show();
-//          }
-//      });
+      FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+      fab.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+          }
+      });
     }
 
     @Override
