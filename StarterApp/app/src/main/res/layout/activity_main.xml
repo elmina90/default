@@ -31,7 +31,8 @@
             android:id="@+id/tabs"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:baselineAligned="false"/>
+            android:baselineAligned="false"
+            app:theme="@style/Base.ThemeOverlay.AppCompat.Light"/>
 
         <LinearLayout
             android:layout_width="0dp"
