@@ -10,7 +10,7 @@
     android:layout_marginTop="5dp"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="@color/black_trans80"
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="@dimen/cardview_default_elevation">
 

@@ -1,5 +1,6 @@
 package com.easter.joe.starterapp;
 
+<<<<<<< HEAD
 import android.support.design.widget.FloatingActionButton;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,6 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
+=======
+>>>>>>> parent of 3c6b4a4... added new icon
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -43,8 +46,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private static int [] ICONS = {R.drawable.ic_dining,
             R.drawable.ic_event,
+<<<<<<< HEAD
             R.drawable.ic_travelspot, R.drawable.ic_favourite};
     private DrawerLayout Drawer;
+=======
+            R.drawable.ic_travelspot};
+>>>>>>> parent of 3c6b4a4... added new icon
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -73,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.getLayoutParams().width = this.dpToPx(280);
         tabLayout.setupWithViewPager(mViewPager);
+<<<<<<< HEAD
         tabLayout.setOnTabSelectedListener(new TabViewPagerOnTabSelectedListener(mViewPager));
 
         // Add icon per tab
@@ -84,6 +92,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             d.setColorFilter(getResources().getColor(R.color.colorGrey), PorterDuff.Mode.SRC_ATOP);
             tabLayout.getTabAt(i).setIcon(d);
+=======
+        for (int i = 0; i < tabLayout.getTabCount() ; i++) {
+            tabLayout.getTabAt(i).setIcon(tabs_icon[i]);
+>>>>>>> parent of 3c6b4a4... added new icon
         }
 
         // Select 1st action_tab at the beginning
@@ -253,8 +265,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public int getCount() {
-            // Show 4 total pages.
-            return 4;
+            // Show 3 total pages.
+            return 3;
         }
 
         @Override
