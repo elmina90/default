@@ -1,5 +1,6 @@
 package com.easter.joe.starterapp;
 
+import android.annotation.SuppressLint;
 import android.support.v4.widget.DrawerLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.app.AlertDialog;
@@ -19,6 +20,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,8 +29,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.easter.joe.starterapp.adapter.SimpleRecyclerAdapter;
+import com.easter.joe.starterapp.model.VersionModel;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -288,12 +297,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public PlaceholderFragment() {
         }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
+
+            @Override
+            public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+                View rootView = inflater.inflate(R.layout.dummy_fragment, container, false);
+
+                final FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.dummyfrag_bg);
+//                frameLayout.setBackgroundColor(color);
+
+                RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.dummyfrag_scrollableview);
+
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
+                recyclerView.setLayoutManager(linearLayoutManager);
+                recyclerView.setHasFixedSize(true);
+
+                List<String> list = new ArrayList<String>();
+                for (int i = 0; i < VersionModel.data.length; i++) {
+                    list.add(VersionModel.data[i]);
+                }
+
+                SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter(list);
+                recyclerView.setAdapter(adapter);
+
+                return rootView;
+            }
+
+
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+//            return rootView;
+//        }
     }
 }
