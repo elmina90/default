@@ -1,6 +1,7 @@
 package com.easter.joe.starterapp;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.support.v4.widget.DrawerLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.app.AlertDialog;
@@ -31,6 +32,9 @@ import android.view.ViewGroup;
 
 import com.easter.joe.starterapp.adapter.SimpleRecyclerAdapter;
 import com.easter.joe.starterapp.model.VersionModel;
+
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -59,12 +63,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    // FAB elements
+    private FrameLayout fab;
+    private ImageButton fabBtn;
+    private View fabShadow;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.simple_grow);
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -115,6 +126,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Drawer.openDrawer(GravityCompat.END);
             }
         });
+
+        // Set init animation of fab
+        fab = (FrameLayout) findViewById(R.id.myfab_main);
+        fabBtn = (ImageButton) findViewById(R.id.fab);
+        fabShadow = findViewById(R.id.myfab_shadow);
+
+        // This animation seems to support OS Lollipop or higher version
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            fabShadow.setVisibility(View.GONE);
+            fabBtn.setBackground(getDrawable(R.drawable.ripple_accent));
+        }
+
+        fab.startAnimation(animation);
 
 //        Use FAB for search feature
       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
