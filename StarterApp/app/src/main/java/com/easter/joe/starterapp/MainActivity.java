@@ -1,7 +1,9 @@
 package com.easter.joe.starterapp;
 
-import android.annotation.SuppressLint;
+import android.media.Image;
 import android.os.Build;
+import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.app.AlertDialog;
@@ -24,6 +26,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,9 +35,12 @@ import android.view.ViewGroup;
 
 import com.easter.joe.starterapp.adapter.SimpleRecyclerAdapter;
 import com.easter.joe.starterapp.model.VersionModel;
+import com.easter.joe.starterapp.utils.MyRecyclerScroll;
 
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -53,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
+    private static MainActivity mInstance = null;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private static int [] ICONS = {R.drawable.ic_dining,
             R.drawable.ic_event,
@@ -74,10 +81,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.simple_grow);
+        // Set init animation of fab
+        fab = (FrameLayout) findViewById(R.id.myfab_main);
+        fabBtn = (ImageButton) findViewById(R.id.fab);
+        fabShadow = findViewById(R.id.myfab_shadow);
+
+        // Define initial animation
+        final Animation animation = AnimationUtils.loadAnimation(this, R.anim.simple_grow);
 
 
-        // Create the adapter that will return a fragment for each of the three
+        // Create the adapter that will return a fragment for each of the four
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -85,17 +98,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        // Fill drawer menu
         this.Drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        // Set tab layout menu
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.getLayoutParams().width = this.dpToPx(280);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setOnTabSelectedListener(new TabViewPagerOnTabSelectedListener(mViewPager));
 
-        // Add icon per tab
+        // Add icon-menu for each tab
         for (int i = 0; i < tabLayout.getTabCount() ; i++) {
             // getResource().getDrawable() is deprecated, use contextCompat.getDrawable() instead
             Drawable dr = ContextCompat.getDrawable(this, ICONS[i]);
@@ -127,26 +141,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        // Set init animation of fab
-        fab = (FrameLayout) findViewById(R.id.myfab_main);
-        fabBtn = (ImageButton) findViewById(R.id.fab);
-        fabShadow = findViewById(R.id.myfab_shadow);
-
         // This animation seems to support OS Lollipop or higher version
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             fabShadow.setVisibility(View.GONE);
             fabBtn.setBackground(getDrawable(R.drawable.ripple_accent));
         }
 
+        // Initial animation
         fab.startAnimation(animation);
 
-//        Use FAB for search feature
-      FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-      fab.setOnClickListener(new View.OnClickListener() {
+        // Use FAB for search feature
+        fabBtn.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View view) {
           }
-      });
+        });
+    }
+
+    public static synchronized MainActivity getInstance(){
+        if(null == mInstance){
+            mInstance = new MainActivity();
+        }
+        return mInstance;
     }
 
     @Override
@@ -318,34 +334,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return fragment;
         }
 
-        public PlaceholderFragment() {
-        }
+        @Nullable
+        @Override
+        public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+            final View rootView = inflater.inflate(R.layout.dummy_fragment, container, false);
+//            final View parentView = inflater.inflate(R.layout.activity_main, container, true);
 
+            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.dummyfrag_scrollableview);
 
-            @Override
-            public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-                View rootView = inflater.inflate(R.layout.dummy_fragment, container, false);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setHasFixedSize(true);
 
-                final FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.dummyfrag_bg);
-//                frameLayout.setBackgroundColor(color);
-
-                RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.dummyfrag_scrollableview);
-
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
-                recyclerView.setLayoutManager(linearLayoutManager);
-                recyclerView.setHasFixedSize(true);
-
-                List<String> list = new ArrayList<String>();
-                for (int i = 0; i < VersionModel.data.length; i++) {
-                    list.add(VersionModel.data[i]);
-                }
-
-                SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter(list);
-                recyclerView.setAdapter(adapter);
-
-                return rootView;
+            List<String> list = new ArrayList<String>();
+            for (int i = 0; i < VersionModel.data.length; i++) {
+                list.add(VersionModel.data[i]);
             }
 
+            SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter(list);
+            recyclerView.setAdapter(adapter);
+
+            recyclerView.addOnScrollListener(new MyRecyclerScroll() {
+
+                Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.simple_shrink);
+                ImageButton instanceFAB = (ImageButton) getActivity().findViewById(R.id.fab);
+
+
+                @Override
+                public void show() {
+                    instanceFAB.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                }
+
+                @Override
+                public void hide() {
+                    instanceFAB.animate().translationY(instanceFAB.getHeight() + getResources().getDimensionPixelSize(R.dimen.fab_margin)).setInterpolator(new AccelerateInterpolator(2)).start();
+                }
+
+
+            });
+
+            return rootView;
+        }
 
 //        @Override
 //        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

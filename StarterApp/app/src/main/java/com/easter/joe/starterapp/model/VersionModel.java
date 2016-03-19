@@ -8,7 +8,11 @@ public class VersionModel {
 
     public static final String[] data = {"Card Image", "Card Image", "Card Image",
             "Card Image", "Card Image", "Card Image",
-            "Card Image", "Card Image", "Card Image", "Card Image", "Card Image"};
+            "Card Image", "Card Image", "Card Image", "Card Image", "Card Image",
+            "Card Image", "Card Image", "Card Image",
+            "Card Image", "Card Image", "Card Image",
+            "Card Image", "Card Image", "Card Image",
+            "Card Image", "Card Image", "Card Image"};
 
     VersionModel(String name){
         this.name = name;
